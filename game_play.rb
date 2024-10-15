@@ -62,9 +62,9 @@ class Gameplay
 
   def check_winner
     if @board.isWinner? == @player1.icone
-      return "\nOMG, WHAT A CRACK!\n#{@player1.name}, YOU WOOOOOON \u{1F60E}!\n\nBahaha #{@player2.name}, What A Looser...\nYou lost. \u{1F480}"
+      return "\nOMG, WHAT A CRACK!\n#{@player1.name}, YOU WOOOOOON \u{1F60E}!\n\nBahaha #{@player2.name}, What A Loo..Ser...\nYou lost. \u{1F480}"
     elsif @board.isWinner? == @player2.icone
-      return "\nOMG, WHAT A CRACK!\n#{@player2.name}, YOU WOOOOOON \u{1F60E}!\n\nBahaha #{@player1.name}, What A Looser...\nYou lost. \u{1F480}"
+      return "\nOMG, WHAT A CRACK!\n#{@player2.name}, YOU WOOOOOON \u{1F60E}!\n\nBahaha #{@player1.name}, What A Loo..Ser...\nYou lost. \u{1F480}"
     else
       return false
     end
