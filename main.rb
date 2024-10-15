@@ -1,3 +1,3 @@
-require_relative 'game'
-game = Game.new
+require_relative 'game_play'
+game = Gameplay.new
 game.start
