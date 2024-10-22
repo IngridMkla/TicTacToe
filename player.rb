@@ -1,7 +1,9 @@
 require_relative 'game_play'
 
+# handles players games rules
 class Player
   attr_accessor :name, :icone
+
   @@piece = { player1: [], player2: [] }
 
   def initialize(name, icone)
@@ -15,30 +17,28 @@ class Player
 
     row = position[0]
     row.upcase!
-    return false unless ("A".."C").include?(row)
+    return false unless ('A'..'C').include?(row)
 
     column = position[1]
-    return false unless ("0".."2").include?(column)
+    return false unless ('0'..'2').include?(column)
 
-    return true
+    true
   end
 
-  def play(board)
-
-    puts "#{Gameplay.current_player.name}, placez votre coup! : "
+  def play(gameplay, board)
+    puts "#{gameplay.current_player.name}, place your shoot! : "
     begin
-      pos = gets.chomp
-    end while !is_position(pos) || !board.is_occupied(pos)
+      position = gets.chomp
+    end while !is_position(position) || !board.occupied?(gameplay, position)
 
-    board.update(pos) #update the board ... (update(pos))
+    board.update(gameplay, position) # update the board ... (update(pos))
 
-    if Gameplay.current_player.icone == 'O'
-      @@piece[:player1] << pos
-    elsif Gameplay.current_player.icone == 'X'
-      @@piece[:player2] << pos
+    if gameplay.current_player.icone == gameplay.player1.icone
+      @@piece[:player1] << position
+    elsif gameplay.current_player.icone == gameplay.player2.icone
+      @@piece[:player2] << position
     end
 
     puts @@piece
-
   end
 end
