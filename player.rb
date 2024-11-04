@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'game_play'
 
 # handles players games rules
@@ -11,7 +13,8 @@ class Player
     @icone = icone
   end
 
-  def is_position(position)
+  # Checking if the position entered is right
+  def position?(position)
     position.strip!
     return false unless position.length == 2
 
@@ -25,20 +28,29 @@ class Player
     true
   end
 
+  # Playing logic
   def play(gameplay, board)
-    puts "#{gameplay.current_player.name}, place your shoot! : "
-    begin
+    puts "#{gameplay.current_player.name}, place your shot! : "
+
+    position = ''
+
+    loop do
       position = gets.chomp
-    end while !is_position(position) || !board.occupied?(gameplay, position)
+      break unless !position?(position) || !board.occupied?(gameplay, position)
+    end
 
-    board.update(gameplay, position) # update the board ... (update(pos))
+    board.update(gameplay, position)
 
+    placements_storage(gameplay, position)
+  end
+
+  # Insert placements of each player into an hash
+  def placements_storage(gameplay, position)
     if gameplay.current_player.icone == gameplay.player1.icone
       @@piece[:player1] << position
     elsif gameplay.current_player.icone == gameplay.player2.icone
       @@piece[:player2] << position
     end
-
     puts @@piece
   end
 end

@@ -2,7 +2,7 @@
 
 require_relative 'game_play'
 
-# This class handles the representation of the board
+# This class handles displays of the board
 class Board
   attr_accessor :grid, :shot_counter
 
@@ -31,15 +31,15 @@ class Board
   end
 
   # Update the board each time a player make a move
-  def update(gameplay, pos)
-    row, column = position_to_coordinates(pos)
+  def update(gameplay, position)
+    row, column = position_to_coordinates(position)
     @grid[row][column] = gameplay.current_player.icone
     @shot_counter += 1
   end
 
   # Check if a position is occupied
-  def occupied?(gameplay, pos)
-    row, column = position_to_coordinates(pos)
+  def occupied?(gameplay, position)
+    row, column = position_to_coordinates(position)
     return true unless @grid[row][column] != '_'
 
     print "This position is already set.
@@ -52,13 +52,11 @@ class Board
   def display
     ordinate = %w[A B C]
     @grid.each_with_index do |row, i|
-      print "#{ordinate[i]}"
+      print(ordinate[i])
       row.each { |j| print "|#{j}" }
       puts
     end
     print " |0|1|2\n"
-    puts
-    puts "shot counter: #{@shot_counter}"
   end
 
   # full? method (si la grille est totalement remplie apres le tour d'un joueur, le jeu s'arrete)
@@ -85,25 +83,31 @@ class Board
   # check every column
   def check_columns(gameplay)
     (0..2).each do |column|
-      return @grid[0][column] if @grid.all? { |row| row[column] == gameplay.player1.icone } || # winning icone
-                                 @grid.all? { |row| row[column] == gameplay.player2.icone }
+      return @grid[0][column] if @grid.all? { |row| row[column] == gameplay.player1.icone } ||
+                                 @grid.all? { |row| row[column] == gameplay.player2.icone } # winning icone
     end
     nil
   end
 
   # check both diagonal (left and right)
   def check_diagonals(gameplay)
-    diagonals = [
-      (0..2).map { |i| @grid[i][i] }, # left
-      (0..2).map { |i| @grid[i][2 - i] } # right
-    ]
-
-    diagonals.each do |diagonal|
-      return diagonal[0] if diagonal.all? { |piece| piece == gameplay.player1.icone } ||
-                            diagonal.all? { |piece| piece == gameplay.player2.icone }
+    [left_diagonal, right_diagonal].each do |diagonal|
+      return diagonal[0] if winning_diagonal?(diagonal, gameplay)
     end
-
     nil
+  end
+
+  def left_diagonal
+    (0..2).map { |i| @grid[i][i] } # left
+  end
+
+  def right_diagonal
+    (0..2).map { |i| @grid[i][2 - i] } # right
+  end
+
+  def winning_diagonal?(diagonal, gameplay)
+    diagonal.all? { |piece| piece == gameplay.player1.icone } ||
+      diagonal.all? { |piece| piece == gameplay.player2.icone }
   end
 end
 
